@@ -22,9 +22,18 @@ The following tool enables:
 * `Python` ,`Pipenv` & `npm` installed on the host running the tool
 
 ## Integrate backup & restore module using terraform
+This module can be integrated into an existing terraform framework. To add it, simply add the following module to your 
+terraform code:
 ```
-module 
+module "route53-backup-restore" {
+  source      = "bridgecrewio/route53-backup-restore/aws"
+  aws_profile = "dev"
+  region      = "us-east-1"
+  interval    = "120"
+  retention   = "14"
+}
 ``` 
+Please note that all the above values are the default values, and therefore these specific values can be omitted.
 
 ## Deploy backup & restore lambdas manually
  
