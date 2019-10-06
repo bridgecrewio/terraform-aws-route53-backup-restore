@@ -1,0 +1,4 @@
+.serverless
+node_modules
+.idea
+__pycache__

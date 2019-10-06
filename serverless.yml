@@ -1,0 +1,98 @@
+service: route53-backup
+
+package:
+  excludeDevDependencies: false
+  individually: true
+  exclude:
+    - node_modules/**
+    - images/**
+
+provider:
+  name: aws
+  runtime: python3.7
+  stackName: ${self:service.name}-stack
+  environment:
+    BUCKET: 'route53-backup-data-#{AWS::AccountId}'
+
+functions:
+  backup-route53:
+    handler: backup_route53.handle
+    name: backup-route53
+    description: Backs up Route53 regularly to a bucket
+    timeout: 120
+    memorySize: 512
+    environment:
+      RETENTION_PERIOD: ${opt:retention-period, "14"}
+    events:
+      - schedule:
+          name: route53-scheduled-backup-trigger
+          rate: rate(${opt:backup-interval, "120"} minutes)
+          enabled: true
+          input: {}
+    iamRoleStatementsName: ${self:service.name}-backup-lambda-role
+    iamRoleStatementsInherit: false
+    iamRoleStatements:
+      - Effect: "Allow"
+        Resource:
+          - "arn:aws:s3:::route53-backup-data-#{AWS::AccountId}/*"
+          - "arn:aws:s3:::route53-backup-data-#{AWS::AccountId}"
+        Action:
+          - "s3:PutEncryptionConfiguration"
+          - "s3:PutObject"
+          - "s3:PutLifecycleConfiguration"
+          - "s3:PutBucketPolicy"
+          - "s3:CreateBucket"
+          - "s3:ListBucket"
+          - "s3:PutBucketVersioning"
+      - Effect: "Allow"
+        Resource: "*"
+        Action:
+          - "route53:GetHealthCheck"
+          - "route53:ListHealthChecks"
+          - "route53:GetHostedZone"
+          - "route53:ListHostedZones"
+          - "route53:ListHostedZonesByName"
+          - "route53:ListResourceRecordSets"
+          - "route53:ListTagsForResource"
+          - "route53:ListTagsForResources"
+
+  restore-route53:
+    handler: restore_route53.handle
+    name: restore-route53
+    description: Restores Route53 from backup
+    timeout: 120
+    memorySize: 512
+    iamRoleStatementsName: ${self:service.name}-restore-lambda-role
+    iamRoleStatementsInherit: false
+    iamRoleStatements:
+      - Effect: "Allow"
+        Resource: "arn:aws:s3:::route53-backup-data-#{AWS::AccountId}/*"
+        Action:
+          - "s3:GetObject"
+      - Effect: "Allow"
+        Resource: "*"
+        Action:
+          - "route53:GetHealthCheck"
+          - "route53:ListHealthChecks"
+          - "route53:GetHostedZone"
+          - "route53:ListHostedZones"
+          - "route53:ListResourceRecordSets"
+          - "route53:ListTagsForResource"
+          - "route53:ListTagsForResources"
+          - "route53:CreateHostedZone"
+          - "route53:GetHealthCheck"
+          - "route53:ChangeResourceRecordSets"
+          - "route53:ListTagsForResource"
+          - "route53:ListTagsForResources"
+          - "route53:CreateHealthCheck"
+          - "route53:AssociateVPCWithHostedZone"
+          - "route53:ChangeTagsForResource"
+      - Effect: "Allow"
+        Resource: "*"
+        Action:
+          - "ec2:DescribeVpcs"
+
+plugins:
+  - serverless-pseudo-parameters
+  - serverless-iam-roles-per-function
+  - serverless-python-requirements

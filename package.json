@@ -1,0 +1,12 @@
+{
+  "name": "route53-backup",
+  "version": "1.0.0",
+  "dependencies": {
+    "aws-sdk": "^2.503.0",
+    "serverless-iam-roles-per-function": "^2.0.1",
+    "serverless-plugin-include-dependencies": "^3.2.1",
+    "serverless-pseudo-parameters": "^2.4.0",
+    "serverless": "^1.46.1",
+    "serverless-python-requirements": "^4.3.0"
+  }
+}
