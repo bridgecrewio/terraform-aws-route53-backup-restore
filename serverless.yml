@@ -4,8 +4,7 @@ package:
   excludeDevDependencies: false
   individually: true
   exclude:
-    - node_modules/**
-    - images/**
+    - "**/*"
 
 provider:
   name: aws
@@ -55,6 +54,10 @@ functions:
           - "route53:ListResourceRecordSets"
           - "route53:ListTagsForResource"
           - "route53:ListTagsForResources"
+    package:
+      include:
+        - route53_utils.py
+        - backup_route53.py
 
   restore-route53:
     handler: restore_route53.handle
@@ -91,6 +94,10 @@ functions:
         Resource: "*"
         Action:
           - "ec2:DescribeVpcs"
+    package:
+      include:
+        - route53_utils.py
+        - restore_route53.py
 
 plugins:
   - serverless-pseudo-parameters

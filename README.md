@@ -20,11 +20,16 @@ The following tool enables:
 * Valid access keys at `~/.aws/credentials` with a default profile configured or matching [AWS Environment Variables](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html)  
 * `Python` ,`Pipenv` & `npm` installed on the host running the tool
 
-## Deploy backup lambda
+## Integrate backup & restore module using terraform
+```
+module 
+``` 
+
+## Deploy backup & restore lambdas manually
  
 ```bash
-git clone https://github.com/bridgecrewio/HowCrew.git
-cd HowCrew/backup-route53
+git clone https://github.com/bridgecrewio/aws-route53-backup-restore.git
+cd aws-route53-backup-restore
 npm i 
 sls deploy --backup-interval ${INTERVAL_IN_MINUTES} --retention-period ${RETENTION_PERIOD} --region ${REGION} --aws-profile ${PROFILE}
 ```
@@ -32,6 +37,7 @@ sls deploy --backup-interval ${INTERVAL_IN_MINUTES} --retention-period ${RETENTI
 
 | Key             | Description                                             | Default value |
 |-----------------|---------------------------------------------------------|---------------|
+| profile         | AWS profile, from the AWS credentials file, to be used  | default       |
 | region          | Region of resources to be deployed                      | us-east-1     |
 | backup-interval | Interval, in minutes, of scheduled backup               | 120 minutes   |
 | retention-period| The time, in days, the backup is stored for             | 14            |
