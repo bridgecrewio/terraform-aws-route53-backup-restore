@@ -1,6 +1,7 @@
 [![Maintained by Bridgecrew.io](https://img.shields.io/badge/maintained%20by-bridgecrew.io-blueviolet)](https://bridgecrew.io)
-[![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/bridgecrewio/aws-route53-backup-restore.svg?label=latest)](https://github.com/bridgecrewio/aws-route53-backup-restore/releases/latest)
-[![CircleCI](https://circleci.com/gh/bridgecrewio/aws-route53-backup-restore.svg?style=svg)](https://circleci.com/gh/bridgecrewio/aws-route53-backup-restore)
+[![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/bridgecrewio/terraform-aws-route53-backup-restore.svg?label=latest)](https://github.com/bridgecrewio/terraform-aws-route53-backup-restore/releases/latest)
+![Terraform Version](https://img.shields.io/badge/tf-%3E%3D0.12.0-blue.svg)
+[![CircleCI](https://circleci.com/gh/bridgecrewio/terraform-aws-route53-backup-restore.svg?style=svg)](https://circleci.com/gh/bridgecrewio/terraform-aws-route53-backup-restore)
 
 # Setup Route53 Backup 
 Amazon Route53 is a managed DNS web service. Route53 is often a mission critical asset in the organization. 
@@ -28,8 +29,8 @@ module
 ## Deploy backup & restore lambdas manually
  
 ```bash
-git clone https://github.com/bridgecrewio/aws-route53-backup-restore.git
-cd aws-route53-backup-restore
+git clone https://github.com/bridgecrewio/terraform-aws-route53-backup-restore.git
+cd terraform-aws-route53-backup-restore
 npm i 
 sls deploy --backup-interval ${INTERVAL_IN_MINUTES} --retention-period ${RETENTION_PERIOD} --region ${REGION} --aws-profile ${PROFILE}
 ```
