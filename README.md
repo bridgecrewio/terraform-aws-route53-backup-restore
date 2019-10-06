@@ -1,3 +1,7 @@
+[![Maintained by Bridgecrew.io](https://img.shields.io/badge/maintained%20by-bridgecrew.io-blueviolet)](https://bridgecrew.io)
+[![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/bridgecrewio/aws-route53-backup-restore.svg?label=latest)](https://github.com/bridgecrewio/aws-route53-backup-restore/releases/latest)
+[![CircleCI](https://circleci.com/gh/bridgecrewio/aws-route53-backup-restore.svg?style=svg)](https://circleci.com/gh/bridgecrewio/aws-route53-backup-restore)
+
 # Setup Route53 Backup 
 Amazon Route53 is a managed DNS web service. Route53 is often a mission critical asset in the organization. 
  
