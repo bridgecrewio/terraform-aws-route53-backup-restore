@@ -1,0 +1,35 @@
+version: 2
+
+jobs:
+  test_deploy_and_run:
+    working_directory: ~/aws-route53-backup-restore
+    docker:
+      - image: bridgecrew/circleci-base
+    environment:
+      REGION: us-west-2
+    steps:
+      - checkout:
+          path: ~/aws-route53-backup-restore
+      - run:
+          name: Install dependencies
+          command: npm i
+      - run:
+          name: Configure AWS credentials
+          command: |
+            aws configure --profile test set aws_access_key_id $ACME_AWS_ACCESS_KEY_ID
+            aws configure --profile test set aws_secret_access_key $ACME_AWS_SECRET_ACCESS_KEY
+            aws configure --profile test set region $REGION
+
+      - run:
+          name: Deploy serverless
+          command: sls deploy --region $REGION --aws-profile test
+
+      - run:
+          name: Clean up
+          command: sls remove --region $REGION --aws-profile test
+
+workflows:
+  version: 2
+  tests:
+    jobs:
+      - test_deploy_and_run
