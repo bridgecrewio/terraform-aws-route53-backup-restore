@@ -14,9 +14,9 @@ The following tool enables:
 
 ## Architecture
 ### Backup data flow
-![backup](images/backup.png)
+![backup](https://raw.githubusercontent.com/bridgecrewio/terraform-aws-route53-backup-restore/master/images/backup.png)
 ### Restore data flow
-![restore](images/restore.png)
+![restore](https://raw.githubusercontent.com/bridgecrewio/terraform-aws-route53-backup-restore/master/images/restore.png)
 ## Prerequisites:
 * Valid access keys at `~/.aws/credentials` with a default profile configured or matching [AWS Environment Variables](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html)  
 * `Python` ,`Pipenv` & `npm` installed on the host running the tool
