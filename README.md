@@ -26,11 +26,11 @@ This module can be integrated into an existing terraform framework. To add it, s
 terraform code:
 ```
 module "route53-backup-restore" {
-  source      = "bridgecrewio/route53-backup-restore/aws"
-  aws_profile = "dev"
-  region      = "us-east-1"
-  interval    = "120"
-  retention   = "14"
+  source            = "bridgecrewio/route53-backup-restore/aws"
+  aws_profile       = "dev"
+  region            = "us-east-1"
+  interval          = "120"
+  retention_period  = "14"
 }
 ``` 
 Please note that all the above values are the default values, and therefore these specific values can be omitted.
