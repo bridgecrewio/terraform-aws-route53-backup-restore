@@ -1,6 +1,7 @@
 [![Maintained by Bridgecrew.io](https://img.shields.io/badge/maintained%20by-bridgecrew.io-blueviolet)](https://bridgecrew.io)
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/bridgecrewio/terraform-aws-route53-backup-restore.svg?label=latest)](https://github.com/bridgecrewio/terraform-aws-route53-backup-restore/releases/latest)
 ![Terraform Version](https://img.shields.io/badge/tf-%3E%3D0.12.0-blue.svg)
+[![Infrastructure Tests](https://www.bridgecrew.cloud/badges/github/bridgecrewio/terraform-aws-route53-backup-restore/cis_aws)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=bridgecrewio%2Fterraform-aws-route53-backup-restore&benchmark=CIS+AWS+V1.2)
 [![CircleCI](https://circleci.com/gh/bridgecrewio/terraform-aws-route53-backup-restore.svg?style=svg)](https://circleci.com/gh/bridgecrewio/terraform-aws-route53-backup-restore)
 
 # Setup Route53 Backup 
