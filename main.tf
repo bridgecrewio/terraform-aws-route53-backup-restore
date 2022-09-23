@@ -4,6 +4,18 @@ resource "aws_s3_bucket" "backup_target" {
   bucket_prefix = "route53-backup-data-${data.aws_caller_identity.current.account_id}-"
 }
 
+resource "aws_s3_bucket_lifecycle_configuration" "remove-after-retention" {
+  bucket = aws_s3_bucket.backup_target.bucket
+  rule {
+    id     = "s3 _deletion"
+    status = "Enabled"
+    filter {}
+    expiration {
+      days = var.retention_period
+    }
+  }
+}
+
 data "aws_iam_policy_document" "backup-route53" {
   statement {
     sid = "1"
@@ -54,21 +66,34 @@ module "backup-route53-lambda" {
   policy_json = data.aws_iam_policy_document.backup-route53.json
   attach_policy_json = true
 
-  source_path = "backup_route53.py"
-
-  layers = [
-    module.lambda-layer.lambda_layer_arn
+  source_path = [
+    "${path.module}/backup_route53.py",
+    "${path.module}/route53_utils.py"
   ]
 
-  allowed_triggers = {
-    cloudwatch_scheduled = {
-      principal = "events.amazonaws.com"
-
-    }
-  }
   environment_variables = {
     BUCKET = aws_s3_bucket.backup_target.bucket
   }
+}
+
+resource "aws_lambda_permission" "cw-timed-exec" {
+  statement_id = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = module.backup-route53-lambda.lambda_function_name
+  principal     = "events.amazonaws.com"
+  source_arn = aws_cloudwatch_event_rule.timed-exec.arn
+}
+
+resource "aws_cloudwatch_event_rule" "timed-exec" {
+  name = "every-${var.interval}-minutes"
+  description = "Fires every ${var.interval} minutes"
+  schedule_expression = "rate(${var.interval} minutes)"
+}
+
+resource "aws_cloudwatch_event_target" "timed-exec" {
+  rule = aws_cloudwatch_event_rule.timed-exec.name
+  target_id = module.backup-route53-lambda.lambda_function_name
+  arn = module.backup-route53-lambda.lambda_function_arn
 }
 
 data "aws_iam_policy_document" "restore-route53" {
@@ -131,25 +156,13 @@ module "restore-route53-lambda" {
   policy_json = data.aws_iam_policy_document.backup-route53.json
   attach_policy_json = true
 
-  source_path = "backup_route53.py"
-
-  layers = [
-    module.lambda-layer.lambda_layer_arn
+  source_path = [
+    "${path.module}/backup_route53.py",
+    "${path.module}/route53_utils.py"
   ]
+
 
   environment_variables = {
     BUCKET = aws_s3_bucket.backup_target.bucket
   }
-}
-
-module "lambda-layer" {
-  source  = "terraform-aws-modules/lambda/aws"
-  version = "4.0.2"
-
-  create_layer = true
-
-  layer_name = "route53_utils"
-  compatible_runtimes = ["python3.7"]
-
-  source_path = "route53_utils.py"
 }
